@@ -47,6 +47,7 @@ namespace PacmanElements
         {
             hero.Left += hero.HorizontalVelocity;
             hero.Top += hero.VerticalVelocity;
+            HeroBorderCollision();
         }
 
         private void Game_KeyDown(object sender, KeyEventArgs e)
@@ -54,14 +55,42 @@ namespace PacmanElements
             switch (e.KeyCode)
             {
                 case Keys.Right:
+                    hero.HorizontalVelocity = hero.Step;
+                    hero.VerticalVelocity = 0;
                     break;
                 case Keys.Down:
+                    hero.HorizontalVelocity = 0;
+                    hero.VerticalVelocity = hero.Step;
                     break;
                 case Keys.Left:
+                    hero.HorizontalVelocity = -hero.Step;
+                    hero.VerticalVelocity = 0;
                     break;
                 case Keys.Up:
+                    hero.HorizontalVelocity = 0;
+                    hero.VerticalVelocity = -hero.Step;
                     break;
-            }      
+            }
+        }
+
+        private void HeroBorderCollision()
+        {
+            if (hero.Left > level.Left + level.Width)
+            {
+                hero.Left = level.Left - hero.Width;
+            }
+            if (hero.Left + hero.Width < level.Left)
+            {
+                hero.Left = level.Left + level.Width;
+            }
+            if (hero.Top > level.Top + level.Height)
+            {
+                hero.Top = level.Top - hero.Height;
+            }
+            if (hero.Top + hero.Height < level.Top)
+            {
+                hero.Top = level.Top + level.Height;
+            }
         }
     }
 }
