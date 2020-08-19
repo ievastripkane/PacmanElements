@@ -2,7 +2,7 @@
 
 1. Create classes (Form, Area, Hero, Enemy, Food)
 2. Add keyboard (WASD) controls movement logic
-3. Hero movement logis
+3. Hero movement logic
 4. Enemy movement logic
 5. Food logic
 6. Collisions

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace PacmanElements
             InitializeComponent();
             InitializeGame();
             InitializeMainTimer();
+            HeroEnemyColission();
         }
 
         private void InitializeGame()
@@ -41,6 +43,7 @@ namespace PacmanElements
         {
             //adding hero to the game
             this.Controls.Add(hero);
+            hero.Parent = level;
             hero.BringToFront();
         }
 
@@ -63,6 +66,7 @@ namespace PacmanElements
             MoveHero();
             HeroBorderCollision();
             MoveEnemies();
+            EnemyBorderCollision();
         }
 
         private void MoveHero()
@@ -102,6 +106,7 @@ namespace PacmanElements
                     hero.VerticalVelocity = -hero.Step;
                     break;
             }
+            SetRandomEnemyDirection();
         }
 
         private void HeroBorderCollision()
@@ -124,6 +129,35 @@ namespace PacmanElements
             }
         }
 
+        private void EnemyBorderCollision()
+        {
+            foreach (var enemy in enemies)
+            {
+                if (enemy.Top < level.Top) //From "up" to "down"
+                {
+                    enemy.HorizontalVelocity = 0;
+                    enemy.VerticalVelocity = +enemy.Step;
+                }
+                if (enemy.Top > level.Height - enemy.Width + level.Top) //From "down" to "up"
+                {
+                    enemy.HorizontalVelocity = 0;
+                    enemy.VerticalVelocity = -enemy.Step;
+                }
+                if (enemy.Left < level.Left) //From "left" to "right"
+                {
+                    enemy.HorizontalVelocity = +enemy.Step;
+                    enemy.VerticalVelocity = 0;
+                }
+                if (enemy.Left > level.Width - enemy.Width + level.Left) //From "right" to "left"
+                {
+                    enemy.HorizontalVelocity = -enemy.Step;
+                    enemy.VerticalVelocity = 0;
+                }
+            }
+
+            
+        }
+
         private void AddEnemies()
         {
             Enemy enemy;
@@ -131,10 +165,42 @@ namespace PacmanElements
             {
                 enemy = new Enemy();
                 enemy.Location = new Point(rand.Next(100, 500), rand.Next(100, 500));
-                enemies.Add(new Enemy());
+                enemy.SetDirection(rand.Next(1, 5));
+                //enemy.SetDirection(1);
+                enemies.Add(enemy);
                 this.Controls.Add(enemy);
+                enemy.Parent = level;
                 enemy.BringToFront();
             }
         }
+
+        private void SetRandomEnemyDirection()
+        {
+            foreach(var enemy in enemies)
+            {
+                enemy.SetDirection(rand.Next(1, 5));
+            }
+        }
+
+        private void HeroEnemyColission()
+        {
+            foreach (var enemy in enemies)
+            {
+                if (enemy.Bounds.IntersectsWith(hero.Bounds))
+                {
+                    GameOver();
+                }
+            }
+        }
+
+        private void GameOver()
+        {
+            mainTimer.Stop();
+            labelGameOver.BackColor = Color.Transparent;
+            labelGameOver.Parent = level;
+            labelGameOver.Visible = true;
+            labelGameOver.BringToFront();
+        } 
+
     }
 }
