@@ -13,18 +13,21 @@ namespace PacmanElements
 {
     public partial class Game : Form
     {
-        private int initializeEnemyCount = 4;
+        private int initializeEnemyCount = 1;
 
         private Random rand = new Random();
         private Level level = new Level();
         private Hero hero = new Hero();
+        private Food food = new Food();
         private Timer mainTimer = null;
+        private Timer enemySpawningTimer = null;
         private List<Enemy> enemies = new List<Enemy>();
         public Game()
         {
             InitializeComponent();
             InitializeGame();
             InitializeMainTimer();
+            InitializeEnemySpawningTimer();
         }
 
         private void InitializeGame()
@@ -35,7 +38,8 @@ namespace PacmanElements
             this.KeyDown += Game_KeyDown;
             AddLevel();
             AddHero();
-            AddEnemies();
+            AddEnemies(initializeEnemyCount);
+            AddFood();
         }
 
         private void AddHero()
@@ -52,12 +56,34 @@ namespace PacmanElements
             this.Controls.Add(level);
         }
 
+        private void AddFood()
+        {
+            //adding food to the game
+            this.Controls.Add(food);
+            food.Location = new Point(rand.Next(100, 400), rand.Next(100, 400));
+            food.Parent = level;
+            food.BringToFront();
+        }
+
         private void InitializeMainTimer()
         {
             mainTimer = new Timer();
             mainTimer.Tick += MainTimer_Tick;
             mainTimer.Interval = 20;
             mainTimer.Start();
+        }
+
+        private void InitializeEnemySpawningTimer()
+        {
+            enemySpawningTimer = new Timer();
+            enemySpawningTimer.Tick += EnemySpawningTimer_Tick;
+            enemySpawningTimer.Interval = 3000;
+            enemySpawningTimer.Start();
+        }
+
+        private void EnemySpawningTimer_Tick(object sender, EventArgs e)
+        {
+            AddEnemies(1);
         }
 
         private void MainTimer_Tick(object sender, EventArgs e)
@@ -67,6 +93,7 @@ namespace PacmanElements
             MoveEnemies();
             EnemyBorderCollision();
             HeroEnemyColission();
+            HeroFoodCollision();
         }
 
         private void MoveHero()
@@ -138,33 +165,44 @@ namespace PacmanElements
             {
                 if (enemy.Top < level.Top) //From "up" to "down"
                 {
-                    enemy.HorizontalVelocity = 0;
-                    enemy.VerticalVelocity = +enemy.Step;
+                    enemy.SetDirection(2);
                 }
                 if (enemy.Top > level.Height - enemy.Height) //From "down" to "up"
                 {
-                    enemy.HorizontalVelocity = 0;
-                    enemy.VerticalVelocity = -enemy.Step;
+                    enemy.SetDirection(4);
                 }
                 if (enemy.Left < level.Left) //From "left" to "right"
                 {
-                    enemy.HorizontalVelocity = +enemy.Step;
-                    enemy.VerticalVelocity = 0;
+                    enemy.SetDirection(1);
                 }
                 if (enemy.Left > level.Width - enemy.Width) //From "right" to "left"
                 {
-                    enemy.HorizontalVelocity = -enemy.Step;
-                    enemy.VerticalVelocity = 0;
+                    enemy.SetDirection(3);
                 }
             }
 
             
         }
 
-        private void AddEnemies()
+        private void HeroFoodCollision()
+        {
+            if (hero.Bounds.IntersectsWith(food.Bounds))
+            {
+                hero.Step += 1;
+                RespawnFood();
+            }
+        }
+
+        private void RespawnFood()
+        {
+            food.Location = new Point(rand.Next(100, 400), rand.Next(100, 400));
+            food.SetType(rand.Next(1, 5));
+        }
+
+        private void AddEnemies(int enemyCount)
         {
             Enemy enemy;
-            for(int i = 0; i < initializeEnemyCount; i++)
+            for(int i = 0; i < enemyCount; i++)
             {
                 enemy = new Enemy();
                 enemy.Location = new Point(rand.Next(100, 500), rand.Next(100, 500));

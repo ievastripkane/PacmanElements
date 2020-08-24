@@ -52,10 +52,9 @@ namespace PacmanElements
         private void InitializeHero()
         {
             this.BackColor = Color.Transparent;
-            this.Size = new Size(40, 40);
+            this.Size = new Size(30, 30);
             this.Location = new Point(200, 200);
             this.Name = "Pacman";
-
         }
     }
 }
