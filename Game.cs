@@ -13,7 +13,7 @@ namespace PacmanElements
 {
     public partial class Game : Form
     {
-        private int initializeEnemyCount = 10;
+        private int initializeEnemyCount = 4;
 
         private Random rand = new Random();
         private Level level = new Level();
@@ -141,7 +141,7 @@ namespace PacmanElements
                     enemy.HorizontalVelocity = 0;
                     enemy.VerticalVelocity = +enemy.Step;
                 }
-                if (enemy.Top > level.Height - enemy.Width + level.Top) //From "down" to "up"
+                if (enemy.Top > level.Height - enemy.Height) //From "down" to "up"
                 {
                     enemy.HorizontalVelocity = 0;
                     enemy.VerticalVelocity = -enemy.Step;
@@ -151,7 +151,7 @@ namespace PacmanElements
                     enemy.HorizontalVelocity = +enemy.Step;
                     enemy.VerticalVelocity = 0;
                 }
-                if (enemy.Left > level.Width - enemy.Width + level.Left) //From "right" to "left"
+                if (enemy.Left > level.Width - enemy.Width) //From "right" to "left"
                 {
                     enemy.HorizontalVelocity = -enemy.Step;
                     enemy.VerticalVelocity = 0;

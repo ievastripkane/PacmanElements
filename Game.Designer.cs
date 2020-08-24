@@ -37,11 +37,12 @@
             this.labelGameOver.BackColor = System.Drawing.Color.White;
             this.labelGameOver.Font = new System.Drawing.Font("Goudy Stout", 22.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.labelGameOver.ForeColor = System.Drawing.Color.Yellow;
-            this.labelGameOver.Location = new System.Drawing.Point(45, 138);
+            this.labelGameOver.Location = new System.Drawing.Point(183, 171);
             this.labelGameOver.Name = "labelGameOver";
             this.labelGameOver.Size = new System.Drawing.Size(436, 52);
             this.labelGameOver.TabIndex = 0;
             this.labelGameOver.Text = "GAME OVER";
+            this.labelGameOver.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelGameOver.Visible = false;
             // 
             // Game
