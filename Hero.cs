@@ -10,7 +10,7 @@ namespace PacmanElements
 {
     class Hero : PictureBox
     {
-        public int Step { get; set; } = 2;
+        public int Step { get; set; } = 3;
         public int HorizontalVelocity { get; set; } = 0;
         public int VerticalVelocity { get; set; } = 0;
         public string Direction { get; set; } = "right";
@@ -42,7 +42,8 @@ namespace PacmanElements
             string imageName = "pacman_" + this.Direction + "_" + frameCounter.ToString();
             this.Image = (Image)Properties.Resources.ResourceManager.GetObject(imageName);
             this.SizeMode = PictureBoxSizeMode.StretchImage;
-            if(frameCounter > 4)
+            frameCounter++;
+            if (frameCounter > 4)
             {
                 frameCounter = 1;
             }

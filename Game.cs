@@ -13,7 +13,7 @@ namespace PacmanElements
 {
     public partial class Game : Form
     {
-        private int initializeEnemyCount = 4;
+        private int initializeEnemyCount = 10;
 
         private Random rand = new Random();
         private Level level = new Level();
@@ -25,7 +25,6 @@ namespace PacmanElements
             InitializeComponent();
             InitializeGame();
             InitializeMainTimer();
-            HeroEnemyColission();
         }
 
         private void InitializeGame()
@@ -67,13 +66,13 @@ namespace PacmanElements
             HeroBorderCollision();
             MoveEnemies();
             EnemyBorderCollision();
+            HeroEnemyColission();
         }
 
         private void MoveHero()
         {
             hero.Left += hero.HorizontalVelocity;
             hero.Top += hero.VerticalVelocity;
-            HeroBorderCollision();
         }
 
         private void MoveEnemies()
@@ -170,7 +169,6 @@ namespace PacmanElements
                 enemy = new Enemy();
                 enemy.Location = new Point(rand.Next(100, 500), rand.Next(100, 500));
                 enemy.SetDirection(rand.Next(1, 5));
-                //enemy.SetDirection(1);
                 enemies.Add(enemy);
                 this.Controls.Add(enemy);
                 enemy.Parent = level;
