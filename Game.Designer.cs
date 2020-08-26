@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.labelGameOver = new System.Windows.Forms.Label();
+            this.ScoreLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelGameOver
@@ -45,11 +46,21 @@
             this.labelGameOver.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.labelGameOver.Visible = false;
             // 
+            // ScoreLabel
+            // 
+            this.ScoreLabel.AutoSize = true;
+            this.ScoreLabel.BackColor = System.Drawing.Color.Red;
+            this.ScoreLabel.Location = new System.Drawing.Point(401, 26);
+            this.ScoreLabel.Name = "ScoreLabel";
+            this.ScoreLabel.Size = new System.Drawing.Size(0, 17);
+            this.ScoreLabel.TabIndex = 1;
+            // 
             // Game
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.ScoreLabel);
             this.Controls.Add(this.labelGameOver);
             this.Name = "Game";
             this.Text = "Form1";
@@ -61,6 +72,7 @@
         #endregion
 
         private System.Windows.Forms.Label labelGameOver;
+        private System.Windows.Forms.Label ScoreLabel;
     }
 }
 

@@ -14,6 +14,8 @@ namespace PacmanElements
     public partial class Game : Form
     {
         private int initializeEnemyCount = 1;
+        private int score = 0;
+
 
         private Random rand = new Random();
         private Level level = new Level();
@@ -40,6 +42,7 @@ namespace PacmanElements
             AddHero();
             AddEnemies(initializeEnemyCount);
             AddFood();
+            UpdateScoreLabel();
         }
 
         private void AddHero()
@@ -179,18 +182,32 @@ namespace PacmanElements
                 {
                     enemy.SetDirection(3);
                 }
-            }
-
-            
+            }            
         }
 
         private void HeroFoodCollision()
         {
             if (hero.Bounds.IntersectsWith(food.Bounds))
             {
-                hero.Step += 1;
+                hero.Step += 0;
+                score += 100;
+                UpdateScoreLabel();
+                AnimateScore(200, food.Left, food.Top);
                 RespawnFood();
             }
+        }
+
+        private void AnimateScore(int scoreValue, int x, int y)
+        {
+            Score scoreImage = new Score(scoreValue);
+            this.Controls.Add(scoreImage);
+            scoreImage.Parent = level;
+            scoreImage.Location = new Point(x, y);
+        }
+
+        private void UpdateScoreLabel()
+        {
+            ScoreLabel.Text = "Score: " + score;
         }
 
         private void RespawnFood()
