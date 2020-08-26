@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics.Eventing.Reader;
 using System.Drawing;
 using System.Drawing.Text;
 using System.Linq;
@@ -190,9 +191,14 @@ namespace PacmanElements
             if (hero.Bounds.IntersectsWith(food.Bounds))
             {
                 hero.Step += 0;
-                score += 100;
+                score += 200;
                 UpdateScoreLabel();
                 AnimateScore(200, food.Left, food.Top);
+
+                if(food.Type == 4)
+                {
+                    hero.PredatorModeOn();
+                }
                 RespawnFood();
             }
         }
@@ -207,7 +213,7 @@ namespace PacmanElements
 
         private void UpdateScoreLabel()
         {
-            ScoreLabel.Text = "Score: " + score;
+            LabelScore.Text = "Score: " + score;
         }
 
         private void RespawnFood()
@@ -241,11 +247,24 @@ namespace PacmanElements
 
         private void HeroEnemyColission()
         {
-            foreach (var enemy in enemies)
+            Enemy enemy;
+            for (int enemyCounter = 0; enemyCounter < enemies.Count; enemyCounter++)
             {
+                enemy = enemies[enemyCounter];
                 if (enemy.Bounds.IntersectsWith(hero.Bounds))
                 {
-                    GameOver();
+                    if(hero.PredatorMode == true)
+                    {
+                        AnimateScore(400, enemy.Left, enemy.Top);
+                        enemies.RemoveAt(enemyCounter);
+                        enemy.Dispose();
+                        score += 400;
+                        UpdateScoreLabel();
+                    }
+                    else
+                    {
+                        GameOver();
+                    }
                 }
             }
         }
@@ -253,10 +272,12 @@ namespace PacmanElements
         private void GameOver()
         {
             mainTimer.Stop();
+            hero.Melt();
             labelGameOver.BackColor = Color.Transparent;
             labelGameOver.Parent = level;
             labelGameOver.Visible = true;
             labelGameOver.BringToFront();
+
         } 
 
     }

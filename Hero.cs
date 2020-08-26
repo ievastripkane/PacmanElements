@@ -14,13 +14,42 @@ namespace PacmanElements
         public int HorizontalVelocity { get; set; } = 0;
         public int VerticalVelocity { get; set; } = 0;
         public string Direction { get; set; } = "right";
+        public bool PredatorMode { get; set; } = false;
 
         private Timer animationTimer = null;
+        private Timer predatorModeTimer = null;
+
         private int frameCounter = 1;
 
         public Hero()
         {
             InitializeHero();
+            InitializeAnimationTimer();
+        }
+
+        public void PredatorModeOn()
+        {
+            this.PredatorMode = true;
+            InitializePredatorModeTimer();
+        }
+
+        private void InitializePredatorModeTimer()
+        {
+            predatorModeTimer = new Timer();
+            predatorModeTimer.Interval = 5000;
+            predatorModeTimer.Tick += PredatorModeTimer_Tick;
+            predatorModeTimer.Start();
+        }
+
+        private void PredatorModeTimer_Tick(object sender, EventArgs e)
+        {
+            predatorModeTimer.Stop();
+            this.PredatorMode = false;
+        }
+        public void Melt()
+        {
+            animationTimer.Stop();
+            frameCounter = 1;
             InitializeAnimationTimer();
         }
 
@@ -32,6 +61,28 @@ namespace PacmanElements
             animationTimer.Start();
         }
 
+        private void InitializePacmanMeltTimer()
+        {
+            Timer pacmanMeltTimer = new Timer();
+            pacmanMeltTimer.Tick += PacmanMeltTimer_Tick;
+            pacmanMeltTimer.Interval = 100;
+        }
+
+        private void PacmanMeltTimer_Tick(object sender, EventArgs e)
+        {
+            MeltAnimate();
+        }
+
+        private void MeltAnimate()
+        {
+            string imageName = "pacman_melt" + "_" + frameCounter.ToString();
+            this.Image = (Image)Properties.Resources.ResourceManager.GetObject(imageName);
+            frameCounter++;
+            if (frameCounter > 14)
+            {
+                animationTimer.Stop();
+            }
+        }
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
             Animate();
